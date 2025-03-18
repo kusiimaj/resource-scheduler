@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Bank Resource Scheduler</h1>
+
+    <label for="algorithm">Choose a Scheduling Algorithm:</label>
+    <select id="algorithm">
+        <option value="round_robin">Round Robin</option>
+        <option value="priority">Priority Scheduling</option>
+        <option value="shortest_job">Shortest Job Next</option>
+    </select>
+
+    <button id="startSimulation">Start Simulation</button>
+
+    <h2>Customer Queue</h2>
+    <ul id="customerQueue"></ul>
+
+    <h2>Agent Status</h2>
+    <ul id="agentStatus"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
