@@ -1,73 +1,42 @@
-let customerQueue = [];
-let agents = [
-    { id: 1, name: "Agent 1", available: true },
-    { id: 2, name: "Agent 2", available: true },
-    { id: 3, name: "Agent 3", available: true }
-];
+document.getElementById("fetchSchedule").addEventListener("click", fetchSchedule);
 
-document.getElementById("startSimulation").addEventListener("click", function () {
-    setInterval(addCustomer, 3000); // Customers arrive every 3 seconds
-    setInterval(assignCustomersToAgents, 5000); // Assign customers every 5 seconds
+document.getElementById("addCustomer").addEventListener("click", function () {
+    fetch("http://127.0.0.1:5000/add_customer", { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Customer Added:", data);
+            fetchSchedule();
+        })
+        .catch(error => console.error("Error adding customer:", error));
 });
 
-function addCustomer() {
-    let newCustomer = { id: customerQueue.length + 1, priority: Math.floor(Math.random() * 3) + 1 };
-    customerQueue.push(newCustomer);
-    updateUI();
+function fetchSchedule() {
+    let algorithm = document.getElementById("algorithm").value; // Get selected algorithm
+    fetch(`http://127.0.0.1:5000/schedule?algorithm=${algorithm}`)
+        .then(response => response.json())
+        .then(data => {
+            updateCustomerQueue(data.customers);
+            updateAgentAssignments(data.agents);
+        })
+        .catch(error => console.error("Error fetching schedule:", error));
 }
 
-function assignCustomersToAgents() {
-    if (customerQueue.length === 0) return;
-
-    let algorithm = document.getElementById("algorithm").value;
-
-    if (algorithm === "round_robin") {
-        roundRobinScheduling();
-    } else if (algorithm === "priority") {
-        priorityScheduling();
-    } else if (algorithm === "shortest_job") {
-        shortestJobScheduling();
-    }
-
-    updateUI();
-}
-
-function roundRobinScheduling() {
-    let availableAgent = agents.find(agent => agent.available);
-    if (availableAgent && customerQueue.length > 0) {
-        availableAgent.available = false;
-        let assignedCustomer = customerQueue.shift();
-        setTimeout(() => {
-            availableAgent.available = true;
-            updateUI();
-        }, 5000); // Simulate task completion in 5 seconds
-    }
-}
-
-function priorityScheduling() {
-    customerQueue.sort((a, b) => a.priority - b.priority);
-    roundRobinScheduling();
-}
-
-function shortestJobScheduling() {
-    customerQueue.sort((a, b) => a.id - b.id);
-    roundRobinScheduling();
-}
-
-function updateUI() {
-    let customerList = document.getElementById("customerQueue");
-    customerList.innerHTML = "";
-    customerQueue.forEach(customer => {
+function updateCustomerQueue(customers) {
+    let queueList = document.getElementById("customerQueue");
+    queueList.innerHTML = "";
+    customers.forEach(customer => {
         let li = document.createElement("li");
         li.innerText = `Customer ${customer.id} (Priority: ${customer.priority})`;
-        customerList.appendChild(li);
+        queueList.appendChild(li);
     });
+}
 
-    let agentList = document.getElementById("agentStatus");
+function updateAgentAssignments(agents) {
+    let agentList = document.getElementById("agentAssignments");
     agentList.innerHTML = "";
     agents.forEach(agent => {
         let li = document.createElement("li");
-        li.innerText = `${agent.name} - ${agent.available ? "Available" : "Busy"}`;
+        li.innerText = `${agent.name} - ${agent.available ? "Available" : "Serving Customer " + agent.current_customer.id}`;
         agentList.appendChild(li);
     });
 }
