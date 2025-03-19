@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-BASE_URL = "http://127.0.0.1:5000"
+BASE_URL = "http://host.docker.internal:5000"
 
 # ✅ Test if the API is running
 def test_home():
