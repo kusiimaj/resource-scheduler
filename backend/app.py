@@ -2,6 +2,8 @@ import eventlet
 eventlet.monkey_patch()  # ✅ Patch before any imports
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
+
 from flask_socketio import SocketIO
 from flask_socketio import emit
 import random
@@ -12,9 +14,13 @@ import sqlite3
 
 
 app = Flask(__name__)
+CORS(app)
+
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "Scheduler API is running!"})
+
+simulation_running = False  # ✅ Define it globally
 
 socketio = SocketIO(app, cors_allowed_origins="*",async_mode="eventlet")
 @socketio.on("connect")
@@ -99,7 +105,9 @@ def change_algorithm(algorithm_type):
 def get_status():
     """Returns system status and performance metrics."""
     return jsonify({
+        
         "simulation_running": simulation_running,
+        
         "metrics": {
             "average_wait_time": calculate_average_wait_time(),
             "agent_utilization": [a["utilization"] for a in agents],
