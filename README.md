@@ -1,10 +1,10 @@
-Resource Scheduler
+#Resource Scheduler
 
-Overview
+##Overview
 
 The Resource Scheduler is a real-time task scheduling application that optimizes customer service delivery by managing agent workloads using various scheduling algorithms. The application provides a dynamic environment to simulate and analyze different scheduling strategies.
 
-Live Deployment
+##Live Deployment
 
 The application is deployed on Render: https://rebrand.ly/resource-scheduler-hosted
 
@@ -12,7 +12,7 @@ Backend API: Deployed Backend URL
 
 Frontend UI: Deployed Frontend URL
 
-Features
+##Features
 
 Customer Management
 
