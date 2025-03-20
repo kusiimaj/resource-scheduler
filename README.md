@@ -1,202 +1,112 @@
-#Resource Scheduler
-
-##Overview
-
-The Resource Scheduler is a real-time task scheduling application that optimizes customer service delivery by managing agent workloads using various scheduling algorithms. The application provides a dynamic environment to simulate and analyze different scheduling strategies.
-
-##Live Deployment
-
-The application is deployed on Render: https://rebrand.ly/resource-scheduler-hosted
-
-Backend API: Deployed Backend URL
-
-Frontend UI: Deployed Frontend URL
-
-##Features
-
-Customer Management
-
-Dynamic customer generation with configurable arrival rates
-
-Customer classification (VIP, Corporate, Normal)
-
-Unique customer tracking and wait time monitoring
-
-Customizable service requirements
-
-Agent Management
-
-Automatic assignment of three agents on simulation start
-
-Ability to add or remove agents during the simulation
-
-Real-time agent status monitoring
-
-Workload distribution visualization
-
-Performance metrics tracking
-
-Scheduling Algorithms
-
-Round Robin: Distributes tasks evenly among agents
-
-Priority-based: Prioritizes VIP and Corporate customers
-
-Shortest Job Next: Assigns customers with shortest service time first
-
-Simulation Control
-
-Start/Pause functionality
-
-Reset/Stop capabilities
-
-Real-time system state updates via WebSockets
-
-System Architecture
-
-The application follows the Model-View-Controller (MVC) architecture:
-
-Models: Define customer, agent, and queue data structures
-
-Views: React-based frontend for UI rendering
-
-Controllers: Flask API handlers for business logic
-
-Key Components
-
-Flask Web Server (Python backend)
-
-PostgreSQL Database (Deployed version)
-
-WebSockets for real-time updates
-
-Background Task Scheduler (Event-driven simulation)
-
-Dockerized Deployment for scalable execution
-
-API Reference
-
-RESTful Endpoints
-
-GET /api/status - Retrieves system status and metrics
-
-GET /api/agents - Lists all agents
-
-POST /api/agents - Adds a new agent
-
-DELETE /api/agents/{id} - Removes an agent
-
-GET /api/customers - Lists all customers in queue
-
-POST /api/simulation/start - Starts the simulation
-
-POST /api/simulation/pause - Pauses the simulation
-
-POST /api/simulation/reset - Resets the simulation
-
-PUT /api/algorithm/{algorithm_type} - Changes the scheduling algorithm
-
-WebSocket Events
-
-agent_update - Real-time agent status changes
-
-customer_update - Customer queue changes
-
-metrics_update - Performance metrics updates
-
-Performance Metrics
-
-The system tracks:
-
-Average Wait Time: Time customers spend in the queue
-
-Agent Utilization: Time agents spend actively serving vs idle
-
-Queue Length: Number of customers waiting for service
-
-Task Fairness: Ensures tasks are evenly distributed among agents
-
-Customers Served: Number of customers processed within target time
-
-User Interface
-
-UI Components
-
-Dashboard: Centralized control panel for managing simulation
-
-Agent Panel: Displays agent workload and availability
-
-Queue Monitor: Real-time visualization of waiting customers
-
-Performance Metrics: Live charts and statistics
-
-Installation & Running Locally
-
-Prerequisites
-
-Docker installed
-
-Git installed
-
-Node.js & npm installed
-
-Running via Docker Compose
-
-Clone the repository:
-
-git clone https://github.com/kusiimaj/resource-scheduler.git
-cd resource-scheduler
-
-Start the backend & frontend services:
-
-docker-compose up --build
-
-Access the application:
-
-Backend API: http://localhost:5000
-
-Frontend UI: http://localhost:3000
-
-Running Without Docker
-
-Start Backend:
-
+# **Resource Scheduler - Backend & Frontend**
+
+## Introduction
+The Resource Scheduler is a web-based system designed to efficiently manage service queues using various scheduling algorithms. It ensures optimized task allocation and real-time updates using WebSockets.
+
+## **Features**
+- Real-time updates using WebSockets
+- Multiple Scheduling Algorithms
+- Round Robin Scheduling (Equal task distribution)
+- Priority Scheduling (VIP/Corporate clients get priority)
+- Shortest Job Next (Minimizing waiting time)
+- REST API powered by Flask
+- WebSocket Notifications for real-time user updates
+- Dockerized Deployment (Both Backend & Frontend)
+- Fully Responsive UI built with React & TailwindCSS
+- Automated Tests to ensure reliability
+
+## Tech Stack
+- Backend
+- Python (Flask)
+- Flask-SocketIO for real-time WebSockets
+- SQLite (Lightweight database for queue storage)
+- Docker for containerization
+## Frontend
+- React (Component-based UI)
+-TailwindCSS (Modern UI framework)
+- Axios (For API communication)
+- Socket.io-client (WebSocket connections)
+  
+## Deployment
+- Docker Hub (Containerized backend & frontend)
+- Render (Free cloud hosting for services)
+  
+## Installation & Setup
+### Clone the Repository
+- git clone https://github.com/kusiimaj/resource-scheduler.git
+- cd resource-scheduler
+
+## Setup Backend
+  
+### Using Docker
 cd backend
-python app.py
+docker build -t resource-scheduler-backend .
+docker run -p 5000:5000 resource-scheduler-backend
 
-Start Frontend:
+### Without Docker
+-cd backend
+-python -m venv venv
+-source venv/Scripts/activate  # For Windows (Use `source venv/bin/activate` on Mac/Linux)
+-pip install -r requirements.txt
+-python app.py
 
-cd frontend
-npm start
+## Setup Frontend
+### Using Docker
+-cd frontend
+-docker build -t resource-scheduler-frontend .
+-docker run -p 3000:3000 resource-scheduler-frontend
+### Without Docker
+-cd frontend
+-npm install
+-npm start
+## API Endpoints
+Method	Endpoint	Description
+- GET	/api/customers	Get current queue of customers
+- GET	/api/agents	Get list of available agents
+- POST	/api/add_customer	Add a new customer to the queue
+- POST	/api/simulation/start	Start the scheduling simulation
+- POST	/api/simulation/pause	Pause the simulation
+- POST	/api/simulation/reset	Reset the simulation
+## WebSocket Events
+Event	-- Description
+- customer_update	Sent when a new customer is added
+- agent_update	Sent when agent availability changes
+- metrics_update	Sent when system metrics are updated
+## Automated Testing
+This project includes automated tests to validate API functionality.
 
-Deployment
+### Run Tests
+- cd backend
+- pytest tests/
+Note: Ensure the backend is running before executing tests.
 
-The system is deployed using Render:
+## Docker Deployment
+### Build and Push Backend Image
+- docker tag resource-scheduler-backend kusiimaj/resource-scheduler-backend:latest
+- docker push kusiimaj/resource-scheduler-backend:latest
+  
+### Build and Push Frontend Image
 
-Backend and frontend are containerized using Docker
+- docker tag resource-scheduler-frontend kusiimaj/resource-scheduler-frontend:latest
+- docker push kusiimaj/resource-scheduler-frontend:latest
 
-Automated CI/CD pipeline through GitHub
+### Deploy Using Docker Compose
+- docker-compose up --build
+- Hosted Application
+Live Demo: Click Here https://resource-scheduler-e597.onrender.com/
 
-Contributors
+### Contributors
+- kusiimaj - Backend Developer
+- ndikunoj - API Integration
+- nambielinor - Frontend Developer
+- hnam6 - Docker & Deployment
+### Future Enhancements
+- Implement user authentication
+- Add an admin dashboard for monitoring queues
+- Optimize scheduling algorithms with machine learning
+- Introduce mobile support for agent management
+  
+## License
+This project is open-source and available under the MIT License.
 
-Backend Development: [ndikunoj]
-
-Frontend Development: [nambielinor]
-
-Docker & Deployment: [hnam6]
-
-Project Lead: [Kusiimaj]
-
-License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Acknowledgments
-
-Flask for backend development
-
-React.js & Tailwind CSS for frontend UI
-
-Docker & Render for deployment
-![image](https://github.com/user-attachments/assets/cc6d5a36-07aa-460e-a9b8-5bfa7d300119)
-![image](https://github.com/user-attachments/assets/19614a77-17a2-4a7f-995f-366834134617)
+![image](https://github.com/user-attachments/assets/511fac60-315f-452e-ac74-ff672d67ccc8)
