@@ -16,12 +16,12 @@ The Resource Scheduler is a web-based system designed to efficiently manage serv
 - Automated Tests to ensure reliability
 
 ## Tech Stack
-- Backend
+### Backend
 - Python (Flask)
 - Flask-SocketIO for real-time WebSockets
 - SQLite (Lightweight database for queue storage)
 - Docker for containerization
-## Frontend
+### Frontend
 - React (Component-based UI)
 -TailwindCSS (Modern UI framework)
 - Axios (For API communication)
